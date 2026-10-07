@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Idle Clicker Account</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #bb2d3b;
+        }
+
+        .info {
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<h2>Delete Scramble Crash Account</h2>
+
+
+<div class="info">
+
+    <strong>How to find your Player UUID:</strong>
+
+    <p>
+        Open the Scramble Crash app →
+        Go to your <strong>User Detail</strong> page →
+        Copy your <strong>Player UUID</strong>.
+    </p>
+
+    <p>
+        The Player UUID is a unique identifier assigned to your account.
+    </p>
+
+</div>
+
+
+<label for="playerUuid">
+    Player UUID
+</label>
+
+<input
+    id="playerUuid"
+    type="text"
+    placeholder="Example: 8275572f-8666-4bbd-999e-5e4619b5ccdc"
+/>
+
+
+<button onclick="deleteAccount()">
+    Delete My Account
+</button>
+
+
+<div id="result"></div>
+
+
+<script>
+
+async function deleteAccount() {
+
+    const playerUuid =
+        document.getElementById("playerUuid").value.trim();
+
+    const result =
+        document.getElementById("result");
+
+
+    if (!playerUuid) {
+        result.innerHTML =
+            "❌ Please enter your Player UUID.";
+        return;
+    }
+
+
+    if (!confirm(
+        "Are you sure you want to permanently delete your Scramble Crash account?"
+    )) {
+        return;
+    }
+
+
+    const apiUrl =
+        `https://prod-api-scramble-crash-worker.bunchhoeun-chhim.workers.dev/player/account/${playerUuid}`;
+
+
+    result.innerHTML =
+        "Deleting account...";
+
+
+    try {
+
+        const response = await fetch(apiUrl, {
+
+            method: "DELETE",
+
+            headers: {
+                "x-app-secret": "x-jwt-secret",
+                "Content-Type": "application/json"
+            }
+
+        });
+
+
+        const data = await response.json();
+
+
+        if (response.ok) {
+
+            result.innerHTML =
+                "✅ Your account and associated data have been deleted successfully.";
+
+        } else {
+
+            result.innerHTML =
+                "❌ Failed to delete account.<br>" +
+                JSON.stringify(data);
+
+        }
+
+
+    } catch (error) {
+
+        result.innerHTML =
+            "❌ Error: " + error.message;
+
+    }
+
+}
+
+</script>
+
+
+</body>
+</html>
